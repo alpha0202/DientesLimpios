@@ -19,7 +19,6 @@ namespace DientesLimpios.Pruebas.Aplicacion.CasoDeUso.Consultorios
     {
         private IRepositorioConsultorio _repositorio;
         private IUnidadDeTrabajo _unidadDeTrabajo;
-        private IValidator<ComandoCrearConsultorios> _validator;
         private CasoDeUsoCrearConsultorios _casoDeUsoCrearConsultorios;
 
         [TestInitialize]
@@ -27,8 +26,7 @@ namespace DientesLimpios.Pruebas.Aplicacion.CasoDeUso.Consultorios
         {
             _repositorio = Substitute.For<IRepositorioConsultorio>();
             _unidadDeTrabajo = Substitute.For<IUnidadDeTrabajo>();
-            _validator = Substitute.For<IValidator<ComandoCrearConsultorios>>();
-            _casoDeUsoCrearConsultorios = new CasoDeUsoCrearConsultorios(_repositorio, _unidadDeTrabajo, _validator);
+            _casoDeUsoCrearConsultorios = new CasoDeUsoCrearConsultorios(_repositorio, _unidadDeTrabajo);
         }
 
 
@@ -41,47 +39,20 @@ namespace DientesLimpios.Pruebas.Aplicacion.CasoDeUso.Consultorios
                 Nombre = "Consultorio Central"
             };
 
-            _validator.ValidateAsync(comando).Returns(new ValidationResult());
-
-
+           
             var consultorioCreado = new Consultorio("Consultorio A");
             _repositorio.Agregar(Arg.Any<Consultorio>()).Returns(consultorioCreado);
             // Act
             var resultado = await _casoDeUsoCrearConsultorios.Handle(comando);
+
             // Assert
-            await _validator.Received(1).ValidateAsync(comando);
+            
             await _repositorio.Received(1).Agregar(Arg.Any<Consultorio>());
             await _unidadDeTrabajo.Received(1).Persistir();
             Assert.AreNotEqual(Guid.Empty, resultado);
         }
 
-        [TestMethod]
-        public async Task Handle_ComandoInvalido_LanzaExcepcion()
-        {
-            // Arrange
-            var comando = new ComandoCrearConsultorios
-            {
-                Nombre = "" // Nombre inválido
-            };
-
-            var resultadoValidacion = new ValidationResult(new[]
-            {
-                new ValidationFailure("Nombre", "El nombre no puede estar vacío.")
-            });
-
-           
-            _validator.ValidateAsync(comando).Returns(resultadoValidacion);
-           
-            // Act & Assert
-            await Assert.ThrowsExceptionAsync<ExcepcionValidacion>(async () =>
-            {
-                await _casoDeUsoCrearConsultorios.Handle(comando);
-            });
-
-            await _repositorio.DidNotReceive().Agregar(Arg.Any<Consultorio>());
-           
-
-        }
+       
 
         [TestMethod]
         public async Task Handle_ErrorEnRepositorio_LanzaExcepcionYRollBack()
@@ -93,7 +64,7 @@ namespace DientesLimpios.Pruebas.Aplicacion.CasoDeUso.Consultorios
             };
 
             _repositorio.Agregar(Arg.Any<Consultorio>()).Returns<Task<Consultorio>>(x => { throw new Exception("Error en el repositorio"); });
-            _validator.ValidateAsync(comando).Returns(new ValidationResult());
+           
             // Act & Assert
             await Assert.ThrowsExceptionAsync<Exception>(async () =>
             {
