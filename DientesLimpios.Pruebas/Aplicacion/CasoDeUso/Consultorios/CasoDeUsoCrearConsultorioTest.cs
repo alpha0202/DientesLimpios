@@ -15,16 +15,16 @@ using System.Threading.Tasks;
 namespace DientesLimpios.Pruebas.Aplicacion.CasoDeUso.Consultorios
 {
     [TestClass]
-    public class CasoDeUsoConsultorioTest
+    public class CasoDeUsoCrearConsultorioTest
     {
-        private IRepositorioConsultorio _repositorio;
+        private IRepositorioConsultorios _repositorio;
         private IUnidadDeTrabajo _unidadDeTrabajo;
         private CasoDeUsoCrearConsultorios _casoDeUsoCrearConsultorios;
 
         [TestInitialize]
         public void SetUp()
         {
-            _repositorio = Substitute.For<IRepositorioConsultorio>();
+            _repositorio = Substitute.For<IRepositorioConsultorios>();
             _unidadDeTrabajo = Substitute.For<IUnidadDeTrabajo>();
             _casoDeUsoCrearConsultorios = new CasoDeUsoCrearConsultorios(_repositorio, _unidadDeTrabajo);
         }

@@ -12,7 +12,7 @@ namespace DientesLimpios.Aplicacion.Contratos.Repositorios
         Task<IEnumerable<T>> ObtenerTodos();
         Task<T> Agregar(T entidad);
         Task Actualizar(T entidad);
-        Task<T> Borrar(T entidad);
+        Task Borrar(T entidad);
 
     }
 }

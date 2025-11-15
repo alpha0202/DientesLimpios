@@ -7,15 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.11" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DientesLimpios.Dominio\DientesLimpios.Dominio.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="CasosDeUso\Consultas\" />
+    <ProjectReference Include="..\DientesLimpios.Aplicacion\DientesLimpios.Aplicacion.csproj" />
   </ItemGroup>
 
 </Project>

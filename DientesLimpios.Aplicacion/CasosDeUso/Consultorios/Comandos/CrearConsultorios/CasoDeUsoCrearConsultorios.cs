@@ -16,11 +16,11 @@ namespace DientesLimpios.Aplicacion.CasosDeUso.Consultorios.Comandos.CrearConsul
 {
     public class CasoDeUsoCrearConsultorios : IRequestHandler<ComandoCrearConsultorios, Guid>
     {
-        private readonly IRepositorioConsultorio _repositorio;
+        private readonly IRepositorioConsultorios _repositorio;
         private readonly IUnidadDeTrabajo _unidadDeTrabajo;
         
 
-        public CasoDeUsoCrearConsultorios(IRepositorioConsultorio repositorio, 
+        public CasoDeUsoCrearConsultorios(IRepositorioConsultorios repositorio, 
                                           IUnidadDeTrabajo unidadDeTrabajo
                                           )
         {
