@@ -24,6 +24,48 @@ namespace DientesLimpios.Aplicacion.Utilidades.Mediador
         public async Task<TResponse> Send<TResponse>(IRequest<TResponse> request)
         {
 
+            await RealizarValidaciones(request);
+
+
+            var tipoCasoDeUso = typeof(IRequestHandler<,>)
+                                .MakeGenericType(request.GetType(), typeof(TResponse));
+
+            var casoDeUso = _serviceProvider.GetService(tipoCasoDeUso);
+
+
+            if (casoDeUso is null)
+            {
+                throw new ExcepcionDeMediador($"No se encontró un caso de uso para la solicitud de tipo {request.GetType().Name}");
+            }
+
+            var metodoHandle = tipoCasoDeUso.GetMethod("Handle")!;
+            return await (Task<TResponse>)metodoHandle.Invoke(casoDeUso, [request]);
+
+        }
+
+        public async Task Send(IRequest request)
+        {
+            await RealizarValidaciones(request);
+
+            var tipoCasoDeUso = typeof(IRequestHandler<>)
+                                .MakeGenericType(request.GetType());
+            var casoDeUso = _serviceProvider.GetService(tipoCasoDeUso);
+
+            if (casoDeUso is null)
+            {
+                throw new ExcepcionDeMediador($"No se encontró un caso de uso para la solicitud de tipo {request.GetType().Name}");
+            }
+
+            var metodoHandle = tipoCasoDeUso.GetMethod("Handle")!;
+            await (Task)metodoHandle.Invoke(casoDeUso, new object[] {request})!;
+        }
+
+
+
+
+
+        private async Task RealizarValidaciones(object request)
+        {
             var tipoValidador = typeof(IValidator<>).MakeGenericType(request.GetType());
 
             var validador = _serviceProvider.GetService(tipoValidador);
@@ -46,22 +88,6 @@ namespace DientesLimpios.Aplicacion.Utilidades.Mediador
 
             }
 
-
-
-
-            var tipoCasoDeUso = typeof(IRequestHandler<,>)
-                                .MakeGenericType(request.GetType(), typeof(TResponse));
-
-            var casoDeUso = _serviceProvider.GetService(tipoCasoDeUso);
-
-
-            if (casoDeUso is null)
-            {
-                throw new ExcepcionDeMediador($"No se encontró un caso de uso para la solicitud de tipo {request.GetType().Name}");
-            }
-
-            var metodoHandle = tipoCasoDeUso.GetMethod("Handle")!;
-            return await (Task<TResponse>)metodoHandle.Invoke(casoDeUso, [request]);
 
         }
     }
