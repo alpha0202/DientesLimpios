@@ -14,15 +14,29 @@ namespace DientesLimpios.Dominio.Entidades
 
         public Consultorio(string nombre) { 
         
-            if(string.IsNullOrWhiteSpace(nombre))
-            {
-                throw new ExcepcionesReglaDeNegocio($"El {nameof(nombre)} es obligatorio.");
-                    
-            }
-            
+            AplicarReglaDeNegocioNombre(nombre);
+
             Nombre = nombre;
             Id = Guid.CreateVersion7();
 
         }
+
+        public void ActualizarNombre(string nombre)
+        {
+            AplicarReglaDeNegocioNombre(nombre);
+            Nombre = nombre;
+        }
+
+
+        private void AplicarReglaDeNegocioNombre(string nombre)
+        {
+            if (string.IsNullOrWhiteSpace(nombre))
+            {
+                throw new ExcepcionesReglaDeNegocio($"El {nameof(nombre)} es obligatorio.");
+            }
+            Nombre = nombre;
+        }
+
+
     }
 }

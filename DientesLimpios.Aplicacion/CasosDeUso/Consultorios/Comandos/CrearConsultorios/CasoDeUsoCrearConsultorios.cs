@@ -18,15 +18,16 @@ namespace DientesLimpios.Aplicacion.CasosDeUso.Consultorios.Comandos.CrearConsul
     {
         private readonly IRepositorioConsultorios _repositorio;
         private readonly IUnidadDeTrabajo _unidadDeTrabajo;
-        
+     
 
         public CasoDeUsoCrearConsultorios(IRepositorioConsultorios repositorio, 
                                           IUnidadDeTrabajo unidadDeTrabajo
+                                          
                                           )
         {
             _repositorio = repositorio;
             _unidadDeTrabajo = unidadDeTrabajo;
-            
+           
         }
 
         public async Task<Guid> Handle(ComandoCrearConsultorios comando)

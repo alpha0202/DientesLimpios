@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace DientesLimpios.Aplicacion.Utilidades.Mediador
 {
@@ -73,7 +74,7 @@ namespace DientesLimpios.Aplicacion.Utilidades.Mediador
             if (validador is not null)
             {
                 var metodoValidar = tipoValidador.GetMethod("ValidateAsync");
-                var TareaValidar = await (Task<FluentValidation.Results.ValidationResult>)metodoValidar!.Invoke(validador, [request, CancellationToken.None])!;
+                var TareaValidar = await (Task<ValidationResult>)metodoValidar!.Invoke(validador, [request, CancellationToken.None])!;
 
                 //await TareaValidar.ConfigureAwait(false);
 

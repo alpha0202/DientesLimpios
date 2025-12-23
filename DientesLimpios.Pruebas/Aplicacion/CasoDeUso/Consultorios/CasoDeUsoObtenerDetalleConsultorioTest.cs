@@ -51,6 +51,7 @@ namespace DientesLimpios.Pruebas.Aplicacion.CasoDeUso.Consultorios
 
         [TestMethod]
         [ExpectedException(typeof(ExcepcionNoEncontrado))]
+        
         public async Task Handle_ConsultorioNoExiste_LanzaExcepcionNoEncontrado()
         {
             //Arrange
